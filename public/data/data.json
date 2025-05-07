@@ -1,6 +1,6 @@
 {
   "name": "myLab",
-  "icon": "icon/google.png",
+  "icon": "data/icon/google.png",
   "data": [
     {
       "group": {
@@ -17,7 +17,7 @@
         {
           "title": "Google",
           "url": "http://google.com",
-          "icon": "icon/google.png",
+          "icon": "data/icon/google.png",
           "bgColor": ""
         }
       ]

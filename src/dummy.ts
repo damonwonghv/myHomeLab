@@ -1,26 +1,24 @@
 import type { HomeLabData } from ".";
 
 export default {
-  name: "myLab",
-  icon: "",
+  name: "myHomeLab",
   data: [
     {
       group: {
         icon: "",
-        title: "test",
+        title: "Test Lab",
         color: ""
       },
       links: [
         {
           title: "Homelab",
-          subtitle: "",
+          subtitle: "Proxmox",
           url: "http://proxmox.com",
           textColor: "#fff"
         },
         {
           title: "Google",
           url: "http://google.com",
-          icon: "icon/google.png",
           bgColor: ""
         }
       ]
