@@ -1,0 +1,26 @@
+{
+  "name": "myLab",
+  "icon": "icon/google.png",
+  "data": [
+    {
+      "group": {
+        "icon": "",
+        "title": "myLab test",
+        "color": ""
+      },
+      "links": [
+        {
+          "title": "Homelab",
+          "subtitle": "",
+          "url": "http://proxmox.com"
+        },
+        {
+          "title": "Google",
+          "url": "http://google.com",
+          "icon": "icon/google.png",
+          "bgColor": ""
+        }
+      ]
+    }
+  ]
+}
