@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "preview": "vite preview",
-    "docker:build":"tsc -b && vite build && docker build -t damonwong/myhomelab:latest ."
+    "docker:build":"tsc -b && vite build && docker build --platform=linux/amd64 -t damonwong/myhomelab:latest ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
