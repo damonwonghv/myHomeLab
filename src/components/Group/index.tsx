@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { LinkType } from "../../index.d";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { MyLink } from "../Link";
-import "./index.module.less";
+import "./index.less";
 
 interface GroupProps {
   title: string;
