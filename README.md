@@ -143,6 +143,92 @@ Icons can be added to both groups and links. You can use image files (e.g., PNG,
 
 - **Node.js**: Ensure you have Node.js installed on your system. Please use the latest LTS version (Node.js 20 or above). You can download it from [nodejs.org](https://nodejs.org/).
 
+## Docker Deployment
+
+### Dockerfile Overview
+
+此專案包含一個 Dockerfile，用於將應用程式打包成 Docker 映像檔並部署為容器。
+
+**Dockerfile 功能說明：**
+- 使用 `nginx:alpine` 作為基礎映像檔（輕量級 Web 伺服器）
+- 將建置後的靜態檔案（`dist` 目錄）複製到 nginx 的網頁根目錄
+- 暴露 8081 端口供外部存取
+- 啟動 nginx 服務以提供靜態網站服務
+
+### 建置與執行 Docker 容器
+
+#### 方法一：使用專案提供的腳本（推薦）
+
+專案已提供 `docker:build` 腳本，會自動建置專案並打包成 Docker 映像檔：
+
+```bash
+# 使用 Yarn
+yarn docker:build
+
+# 使用 npm
+npm run docker:build
+```
+
+此腳本會：
+1. 編譯 TypeScript 程式碼
+2. 建置 Vite 專案（產生 `dist` 目錄）
+3. 建置 Docker 映像檔（標籤為 `damonwong/myhomelab:latest`）
+
+#### 方法二：手動建置
+
+1. **建置專案**：
+   ```bash
+   # 使用 Yarn
+   yarn build
+   
+   # 使用 npm
+   npm run build
+   ```
+
+2. **建置 Docker 映像檔**：
+   ```bash
+   docker build -t myhomelab:latest .
+   ```
+
+3. **執行容器**：
+   ```bash
+   docker run -d -p 8081:8081 myhomelab:latest
+   ```
+
+4. **存取應用程式**：
+   開啟瀏覽器並前往 `http://localhost:8081`
+
+### Docker 命令參考
+
+```bash
+# 建置映像檔
+docker build -t myhomelab:latest .
+
+# 執行容器（背景執行）
+docker run -d -p 8081:8081 --name myhomelab myhomelab:latest
+
+# 檢視執行中的容器
+docker ps
+
+# 檢視容器日誌
+docker logs myhomelab
+
+# 停止容器
+docker stop myhomelab
+
+# 移除容器
+docker rm myhomelab
+
+# 移除映像檔
+docker rmi myhomelab:latest
+```
+
+### 注意事項
+
+- Dockerfile 中暴露的端口為 8081，nginx 預設監聽 80 端口。若需使用 8081，可能需要額外配置 nginx 設定檔。
+- 確保在建置 Docker 映像檔之前已執行 `yarn build` 或 `npm run build`，以產生 `dist` 目錄。
+- 若使用 `docker:build` 腳本，會自動處理建置流程。
+
 ## Wishlist
 1. Support icon fonts (e.g. Font Awesome).
 2. Notice box
