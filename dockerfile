@@ -17,7 +17,13 @@
 
 # 使用 nginx:alpine 作為基礎映像檔
 # alpine 版本體積小，適合生產環境使用
+# 注意：Alpine Linux 預設不包含 bash，只提供 sh
+# 如需使用 bash，請取消下方安裝 bash 的註釋
 FROM nginx:alpine
+
+# 可選：安裝 bash（如果需要使用 bash 而不是 sh）
+# 注意：這會增加映像檔大小，通常不建議在生產環境使用
+RUN apk add --no-cache bash
 
 # 將建置後的靜態檔案複製到 nginx 的網頁根目錄
 # dist 目錄應包含建置後的 index.html 和相關資源檔案

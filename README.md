@@ -213,6 +213,9 @@ docker ps
 # 檢視容器日誌
 docker logs myhomelab
 
+# 進入容器終端（注意：Alpine 使用 sh，不是 bash）
+docker exec -it myhomelab sh
+
 # 停止容器
 docker stop myhomelab
 
@@ -225,9 +228,11 @@ docker rmi myhomelab:latest
 
 ### 注意事項
 
-- Dockerfile 中暴露的端口為 8081，nginx 預設監聽 80 端口。若需使用 8081，可能需要額外配置 nginx 設定檔。
-- 確保在建置 Docker 映像檔之前已執行 `yarn build` 或 `npm run build`，以產生 `dist` 目錄。
-- 若使用 `docker:build` 腳本，會自動處理建置流程。
+- **Shell 環境**：此 Dockerfile 使用 `nginx:alpine` 作為基礎映像檔。Alpine Linux 預設不包含 `bash`，只提供 `sh`。進入容器時請使用 `docker exec -it <container> sh` 而不是 `bash`。
+  - 如果確實需要 `bash`，可以在 Dockerfile 中取消註釋 `RUN apk add --no-cache bash` 這一行來安裝 bash（但這會增加映像檔大小）。
+- **端口配置**：Dockerfile 中暴露的端口為 8081，nginx 預設監聽 80 端口。若需使用 8081，可能需要額外配置 nginx 設定檔。
+- **建置前置作業**：確保在建置 Docker 映像檔之前已執行 `yarn build` 或 `npm run build`，以產生 `dist` 目錄。
+- **自動化建置**：若使用 `docker:build` 腳本，會自動處理建置流程。
 
 ## Wishlist
 1. Support icon fonts (e.g. Font Awesome).
