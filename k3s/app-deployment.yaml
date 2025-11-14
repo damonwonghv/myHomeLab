@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: myhomelab
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: myhomelab
+    template:
+        metadata:
+            labels:
+                app: myhomelab
+        spec:
+            containers:
+                - name: myhomelab
+                  image: damonwong/myhomelab:latest
+                  ports:
+                      - containerPort: 80
+                  volumeMounts:
+                      - name: myhomelab-volume
+                        mountPath: /usr/share/nginx/html/data
+            volumes:
+                - name: myhomelab-volume
+                  hostPath:
+                      path: /nfs/minilabhomelab/myhomelab
+                      type: DirectoryOrCreate
