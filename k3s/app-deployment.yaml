@@ -2,8 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: myhomelab
+    labels:
+        app: myhomelab
 spec:
-    replicas: 3
+    replicas: 2
     selector:
         matchLabels:
             app: myhomelab
@@ -15,13 +17,40 @@ spec:
             containers:
                 - name: myhomelab
                   image: damonwong/myhomelab:latest
+                  imagePullPolicy: Always
                   ports:
                       - containerPort: 80
+                        name: http
+                        protocol: TCP
                   volumeMounts:
-                      - name: myhomelab-volume
+                      - name: host-data
                         mountPath: /usr/share/nginx/html/data
+                        readOnly: false
+                  resources:
+                      requests:
+                          memory: '64Mi'
+                          cpu: '100m'
+                      limits:
+                          memory: '128Mi'
+                          cpu: '200m'
+                  livenessProbe:
+                      httpGet:
+                          path: /
+                          port: 80
+                      initialDelaySeconds: 30
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                      failureThreshold: 3
+                  readinessProbe:
+                      httpGet:
+                          path: /
+                          port: 80
+                      initialDelaySeconds: 10
+                      periodSeconds: 5
+                      timeoutSeconds: 3
+                      failureThreshold: 3
             volumes:
-                - name: myhomelab-volume
+                - name: host-data
                   hostPath:
                       path: /nfs/minilabhomelab/myhomelab
                       type: DirectoryOrCreate
@@ -29,12 +58,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: myhomelab
+    name: myhomelab-service
+    labels:
+        app: myhomelab
 spec:
+    type: ClusterIP
+    ports:
+        - port: 80
+          targetPort: 80
+          protocol: TCP
+          name: http
     selector:
         app: myhomelab
-    ports:
-        - protocol: TCP
-          port: 80
-          targetPort: 80
-    type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: myhomelab-ingress
+    labels:
+        app: myhomelab
+    annotations:
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+    rules:
+        - http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: myhomelab-service
+                            port:
+                                number: 80
