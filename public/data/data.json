@@ -1,6 +1,6 @@
 {
   "name": "myLab",
-  "icon": "data/icon/google.png",
+  "icon": "data/icon/host.png",
   "data": [
     {
       "group": {
@@ -25,25 +25,6 @@
       ]
     },
     {
-      "group": {
-        "icon": "",
-        "title": "myLab test",
-        "color": ""
-      },
-      "links": [
-        {
-          "title": "Homelab",
-          "subtitle": "",
-          "url": "http://proxmox.com"
-        },
-        {
-          "title": "Google",
-          "url": "http://google.com",
-          "icon": "data/icon/google.png",
-          "bgColor": ""
-        }
-      ]
-    },{
       "group": {
         "icon": "",
         "title": "myLab test",
