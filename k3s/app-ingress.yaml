@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: myhomelab-ingress
+    annotations:
+        # Traefik 特定註解（k3s 預設使用 Traefik）
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+        # 如果需要 HTTPS 重定向
+        traefik.ingress.kubernetes.io/router.middlewares: default-redirectscheme@kubernetescrd
+spec:
+    ingressClassName: traefik  # k3s 預設的 ingress class
+    rules:
+        - host: myhomelab.local  # 替換為您的域名
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: myhomelab
+                            port:
+                                number: 80
+
