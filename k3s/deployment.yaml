@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: myhomelab-deployment
+    labels:
+        app: myhomelab
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: myhomelab
+    template:
+        metadata:
+            labels:
+                app: myhomelab
+        spec:
+            containers:
+                - name: myhomelab
+                  image: damonwong/myhomelab:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 80
+                  volumeMounts:
+                      - name: nfs-volume
+                        mountPath: /app/data
+            volumes:
+                - name: nfs-volume
+                  hostPath:
+                      path: /nfs/minilabhomelab/myhomelab
+                      type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: myhomelab-service
+spec:
+    selector:
+        app: myhomelab
+    ports:
+        - port: 80
+          targetPort: 80
+    type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: myhomelab-ingress
+    annotations:
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+    rules:
+        - host: myhomelab.minilab.local
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: myhomelab-service
+                            port:
+                                number: 80
